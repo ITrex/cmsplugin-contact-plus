@@ -18,12 +18,13 @@ class CMSContactPlusPlugin(CMSPluginBase):
 
     def render(self, context, instance, placeholder):
         request = context['request']
-        
+
         if instance and instance.template:
             self.render_template = instance.template
-        
+
         if request.method == "POST":
-            form = ContactFormPlus(contactFormInstance=instance, request=request, data=request.POST)
+            form = ContactFormPlus(contactFormInstance=instance,
+                                   request=request, data=request.POST)
             if form.is_valid():
                 form.send(instance.recipient_email, request, instance)
                 context.update({
@@ -34,13 +35,16 @@ class CMSContactPlusPlugin(CMSPluginBase):
                 context.update({
                     'contact': instance,
                     'form': form,
-                        
+
                 })
         else:
-            form = ContactFormPlus(contactFormInstance=instance, request=request) 
+            form = ContactFormPlus(contactFormInstance=instance,
+                                   request=request)
             context.update({
-                    'contact': instance,
-                    'form': form,
+                'contact': instance,
+                'object': instance,
+                'instance': instance,
+                'form': form,
             })
         return context
 
