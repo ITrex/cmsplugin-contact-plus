@@ -1,19 +1,14 @@
 #!/bin/env python
 # -*- coding: utf-8 -*-
-
-from django.contrib.admin.widgets import AdminFileWidget
-from django.utils.translation import ugettext as _
-from django.utils.safestring import mark_safe
+from cmsplugin_contact_plus.models import ContactPlus
+from cmsplugin_contact_plus.signals import *
 from django import forms
+from django.conf import settings
+from django.contrib.sites.models import Site
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
-from django.contrib.sites.models import Site
+from django.utils.translation import ugettext as _
 from slugify import slugify
-from django.conf import settings
-
-from cmsplugin_contact_plus.models import ContactPlus
-
-from cmsplugin_contact_plus.signals import *
 
 
 class ContactFormPlus(forms.Form):
@@ -74,7 +69,7 @@ class ContactFormPlus(forms.Form):
                         widget=forms.HiddenInput,
                         required=False)
                 elif extraField.fieldType == 'auto_referral_page':
-                    lInitial = "No referral available."
+                    lInitial = _("No referral available.")
                     if request:
                         lInitial = request.META.get(
                             'HTTP_REFERER', 'No referral available.')
@@ -85,7 +80,7 @@ class ContactFormPlus(forms.Form):
                         widget=forms.HiddenInput,
                         required=False)
                 elif extraField.fieldType == 'auto_GET_parameter':
-                    lInitial = "Key/value parameter not available."
+                    lInitial = _("Key/value parameter not available.")
 
                     if request:
                         lInitial = request.GET.get(label, 'n/a')
